@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -pipe 
+CFLAGS = -Wall -Wextra -O2 -pipe
 TARGET = timetolocal
 SRC = $(wildcard *.c)
 PREFIX = /usr/local

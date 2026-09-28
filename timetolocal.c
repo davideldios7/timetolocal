@@ -47,22 +47,24 @@ int convert(char *timey, char *zone){
     //this sould take even daylight savings too, i stole it from stack overflow i've been trying to not use llms to code shit like this
 
     //tmzn hour --> utc00 --> local time 
-    if(findintable(zone)== -1){
-        return -1;
-    }
     int zntime = findintable(zone);
+    if(zntime == -1)return -1; 
 
     davidtime eugh = strtimetoint(timey); 
-    int zonetimeminutes = (eugh.hour*60)+eugh.minutes;
-    int normalizedminutes = zonetimeminutes+(zntime*-1); //utc00
+    int total = eugh.hour * 60 + eugh.minutes - zntime + offset; //ok this is better yeah
+    
+    int day = 0;
+    while (total < 0){
+        total += 1440; day--; 
+    }
+    while (total >= 1440){
+        total -= 1440; day++;
+    }
 
-    int localminutes = (normalizedminutes+offset) % 1440;  
-
-    davidtime finally; 
-    finally.hour = localminutes/60;
-    finally.minutes = localminutes - finally.hour*60;
-    printf("%02d:%02d\n",finally.hour,finally.minutes);
-    return 0; 
+    printf("%02d:%02d", total / 60, total % 60);
+    if(day) printf(" %+dd", day);  
+    printf("\n");
+    return 0;
 } 
 
 int main (int argc, char **argv){
